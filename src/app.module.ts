@@ -18,7 +18,7 @@ import { AppController } from './app.controller';
       password: 'root',
       database: 'hackathon',
       entities: [Grupo, Turma, Projeto],
-      synchronize: true, */
+      synchronize: true  */
       type: 'postgres',
       url: process.env.DATABASE_URL,
       logging: false,
