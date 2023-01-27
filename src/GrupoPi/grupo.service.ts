@@ -40,7 +40,7 @@ export class GrupoService {
   }
 
   async findByNumeroGrupo (numeroGrupo: number): Promise<Grupo> {
-    let grupo = await this.grupoRepository.findOne({
+   return await this.grupoRepository.findOne({
       where:{
         numeroGrupo
       },
@@ -49,10 +49,7 @@ export class GrupoService {
         projeto:true
       }
     });
-    if (!grupo) {
-      throw new HttpException('Grupo não encontrado!', HttpStatus.NOT_FOUND);
-    }
-      return grupo;
+   
   }
 
   async create(grupo: Grupo): Promise<Grupo>{
@@ -64,13 +61,13 @@ export class GrupoService {
       throw new HttpException('Turma não encontrada!', HttpStatus.NOT_FOUND)
     }
 
-    let grupoTeste = this.findByNumeroGrupo(grupo.numeroGrupo)
+    let grupoTeste = await this.findByNumeroGrupo(grupo.numeroGrupo)
 
-    if (grupoTeste){
-      throw new HttpException('Grupo já cadastrada!', HttpStatus.NOT_FOUND)
-    }
+     if (!grupoTeste){ 
+      return await this.grupoRepository.save(grupo);
 
-    return await this.grupoRepository.save(grupo);
+     }
+     throw new HttpException('Grupo já cadastrado!', HttpStatus.NOT_FOUND)
   }
 
   async update(grupo: Grupo): Promise<Grupo>{

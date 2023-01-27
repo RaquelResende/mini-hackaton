@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Projeto } from './entities/projeto.entities';
 import { Repository, ILike, DeleteResult } from 'typeorm'
 import { GrupoService } from '../GrupoPi/grupo.service';
+import { identity } from 'rxjs';
 
 @Injectable()
 export class ProjetoService {
@@ -28,25 +29,32 @@ export class ProjetoService {
       return projeto;
   }
 
-  async findByNome(nome: string): Promise<Projeto[]>{
-    return await this.projetoRepository.find({
+  async findByNomeProjeto(nomeProjeto: string): Promise<Projeto>{
+    return await this.projetoRepository.findOne({
         where:{
-          nomeProjeto: ILike(`%${nome}%`)
-        }
+          nomeProjeto
+    },
+      relations:{
+        grupo:true
+      }
     })
   }
 
   async create(projeto: Projeto): Promise<Projeto>{
     if (projeto.grupo){
-      let grupo = await this.grupoService.findByNumeroGrupo(projeto.grupo.id)
+      let grupo = await this.grupoService.findById(projeto.grupo.id)
 
       if (!grupo)
-      throw new HttpException('Grupo não encontrado!', HttpStatus.NOT_FOUND)
+    throw new HttpException('Grupo não encontrado!', HttpStatus.NOT_FOUND)
     }
 
-    return await this.projetoRepository.save(projeto);
+    let projetoTest= await this.findByNomeProjeto(projeto.nomeProjeto)
+   if(!projetoTest){
+   return await this.projetoRepository.save(projeto)
+   }
+throw new HttpException("projeto já cadastrado", HttpStatus.NOT_FOUND )
+ 
   }
-
   async update(projeto: Projeto): Promise<Projeto>{
     let buscaProjeto: Projeto = await this.findById(projeto.id);
     if (!buscaProjeto || !projeto.id){

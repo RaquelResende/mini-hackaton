@@ -10,16 +10,8 @@ import { AppController } from './app.controller';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      /* type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'root',
-      database: 'hackathon',
-      entities: [Grupo, Turma, Projeto],
-      synchronize: true  */
-      type: 'postgres',
+    /*TypeOrmModule.forRoot({
+     type: 'postgres',
       url: process.env.DATABASE_URL,
       logging: false,
       dropSchema: false,
@@ -29,6 +21,17 @@ import { AppController } from './app.controller';
       synchronize: true,
       autoLoadEntities: true
     }),
+*/
+    
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: 'localhost',
+      port: 3306,
+      username: 'root',
+      password: 'root',
+      database: 'hackathon',
+      entities: [Grupo, Turma, Projeto],
+      synchronize: true}),  
     TurmaModule, 
     GrupoModule, 
     ProjetoModule

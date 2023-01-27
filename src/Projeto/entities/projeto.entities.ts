@@ -12,7 +12,7 @@ export class Projeto {
 
     @ApiProperty()
     @IsNotEmpty()
-    @Column({length:100, nullable: false})
+    @Column({length:100, })
     nomeProjeto: string
 
     @ApiProperty()

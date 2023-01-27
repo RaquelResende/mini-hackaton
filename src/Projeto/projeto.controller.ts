@@ -23,8 +23,8 @@ export class ProdutoController {
 
   @Get('/buscar/:nomeProjeto')
   @HttpCode(HttpStatus.OK)
-  findByNome(@Param('nomeProjeto') nome: string): Promise<Projeto[]> {
-    return this.projetoService.findByNome(nome);
+  findByNomeProjeto(@Param('nomeProjeto') nomeProjeto: string): Promise<Projeto> {
+    return this.projetoService.findByNomeProjeto(nomeProjeto);
   }
 
   @Post('/cadastrar')
